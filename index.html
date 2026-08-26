@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>WebGPU Kernel Comparator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">WEBGPU EXPERIMENT</p>
+    <h1>Kernel Comparator</h1>
+    <p>Run two implementations of the same computation on your device and see whether the optimization actually helps.</p>
+  </header>
+
+  <section class="card">
+    <div class="row"><h2>Device</h2><span id="status">Checking WebGPU…</span></div>
+    <div id="device">—</div>
+  </section>
+
+  <section class="card">
+    <div class="row"><h2>2D 9-point stencil</h2><span>global memory vs. tiled workgroup memory</span></div>
+    <div class="controls">
+      <label>Size<select id="size"><option value="1024">1024²</option><option value="2048" selected>2048²</option><option value="4096">4096²</option></select></label>
+      <label>Warmups<input id="warmups" type="number" min="2" max="30" value="5"></label>
+      <label>Runs<input id="runs" type="number" min="10" max="100" value="25"></label>
+      <button id="run" disabled>Run benchmark</button>
+    </div>
+    <p id="progress"></p>
+    <pre id="error" class="error hidden"></pre>
+  </section>
+
+  <section id="results" class="card hidden">
+    <div class="row"><h2>Result</h2><span id="correctness"></span></div>
+    <div class="results">
+      <div><small>Naive median</small><strong id="a">—</strong></div>
+      <div><small>Tiled median</small><strong id="b">—</strong></div>
+      <div><small>Speedup</small><strong id="speedup">—</strong></div>
+    </div>
+    <p id="verdict"></p>
+    <details><summary>Details</summary><div id="details"></div></details>
+  </section>
+
+  <section class="card note">
+    <h2>What this means</h2>
+    <p>The two kernels compute the same stencil. The interesting question is whether staging neighboring values in workgroup memory is actually faster on <em>this</em> GPU.</p>
+    <p>Results are device-, browser-, driver-, workload-, and power-state-specific. This is an experiment, not a universal GPU ranking.</p>
+  </section>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
